@@ -1,0 +1,5 @@
+<launch>
+
+    <node pkg="laneinfo_detector" type="laneinfo_broadcast_node" name="laneinfo_broadcast" output="screen"/>
+
+</launch>

@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<package>
+  <name>voxel_grid_filter</name>
+  <version>1.6.1</version>
+  <description>The voxel_grid_filter package</description>
+  <maintainer email="Dennis.Lu@itri.org.tw">Dennis Lu</maintainer>
+  <license>ITRI</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <build_depend>sensor_msgs</build_depend>
+  <build_depend>velodyne_pointcloud</build_depend>
+  <build_depend>itri_msgs</build_depend>
+
+  <run_depend>sensor_msgs</run_depend>
+  <run_depend>velodyne_pointcloud</run_depend>
+  <run_depend>itri_msgs</run_depend>
+
+  <export>
+  </export>
+</package>

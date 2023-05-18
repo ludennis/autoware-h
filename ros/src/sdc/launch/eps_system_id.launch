@@ -1,0 +1,21 @@
+<launch>
+
+    <arg name="signal_type" default="square_wave"/>
+    <arg name="amplitude" default="50"/>
+    <arg name="frequency" default="0.3"/>
+    <arg name="duration" default="20"/>
+
+    <include file="$(env SDC_CONFIG_DIR)/actuation.launch"/>
+
+    <node
+        pkg="eps_identification"
+        type="eps_identification.py"
+        name="eps_identification"
+        output="screen">
+        <param name="signal_type" value="$(arg signal_type)"/>
+        <param name="amplitude" value="$(arg amplitude)"/>
+        <param name="frequency" value="$(arg frequency)"/>
+        <param name="duration" value="$(arg duration)"/>
+    </node>
+
+</launch>

@@ -1,0 +1,5 @@
+Header header
+uint32 frameID
+PointXYZ position
+PointXYZ estimatedPosition
+PointXYZ estimatedVelocity

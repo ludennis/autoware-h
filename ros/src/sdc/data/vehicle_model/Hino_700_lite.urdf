@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<robot name="car">
+  <link name="base_link">
+    <visual name="base_visual">
+        <origin xyz="-1.74 0  -0.04" rpy="0 0 1.57" /> <!-- Hino_700-->
+      <geometry>
+        <mesh filename="package://sdc/data/vehicle_model/Hino_700_lite.DAE"
+              scale="1.1 1 1"/> <!-- Hino_700 -->
+      </geometry>
+    </visual>
+  </link>
+</robot>

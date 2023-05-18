@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<launch>
+
+    <arg name="route" default="artc"/>
+    <arg name="navgcroad" />
+    <arg name="lanes" />
+
+    <!-- itri -->
+    <arg name="itri_navgcroad" default="95:1, 84:0, 84:0, 85:0, 85:0, 86:0, 86:0, 87:0, 87:0, 88:0, 88:0, 73:0, 73:0, 77:1, 77:1, 76:1, 76:1, 63:1, 63:1, 60:1, 60:1, 59:1, 59:1, 58:1, 58:1, 57:1, 57:1, 3:1, 3:1, 2:1, 2:1, 92:1, 92:1, 114:1, 114:1, 117:1, 117:1, 122:1, 119:1, 119:1, 123:1, 123:1, 105:1, 105:1, 103:1, 103:1, 101:1, 101:1, 99:0, 99:0, 40:1, 40:1, 32:0, 32:0, 39:0, 39:0, 34:0, 34:0, 30:0, 30:0, 16:0, 16:0, 19:0, 19:0, 18:0, 18:0, 22:0, 22:0, 23:0, 23:0, 13:0, 108:0, 108:0, 110:0, 110:0, 82:0, 82:0, 91:0"/>
+    <arg name="itri_lanes" default="222,94,318,220,49,10,219,158,92,216,294,329,148,2,86,324,45,85,153,44,1,290,43,33,205,208,145,178,305,117,280,115,310,357,35,240,177,356,313,176,239,38,355,175,114,354,304,247,352,123,351,184,350,79,172,41,349,258,30,197,29,80,196,81,137,277,377,151,193,152,77,26,53,226,12,341,227"/>
+
+    <arg name="artc_navgcroad" default="2:0, 2:0, 4:1, 4:1, 5:1, 5:1, 6:1, 6:1, 15:0, 15:0, 3:0, 3:0, 5:1, 5:1, 7:0, 7:0, 2:0"/>
+    <arg name="artc_lanes" default="50,51,81,27,74,21,70,12,89,17,83,25,74,22,73,42"/>
+
+    <arg name="waypoints_folder_path" default="subPath" />
+    <arg name="roadline_folder_path" default="lines" />
+    <arg name="marker_folder_path" default="markers" />
+
+    <arg name="navgroad_display" default="/global_navgroads_display" />
+    <arg name="lanenavgroad_display" default="/global_lanenavgroads_display" />
+    <arg name="waypoints_display" default="/global_waypoints_display" />
+    <arg name="roadline_display" default="/road_lines_display" />
+    <arg name="roadmarker_display" default="/road_markers_display" />
+    <arg name="intersections_display" default="/intersections_display" />
+
+    <group if="$(eval arg('route') == 'itri')">
+        <node pkg = "route_mission_handler" type = "route_mission_handler_node" name = "route_mission_handler">
+            <param name="/route" value="$(arg route)"/>
+            <param name="navgcroad" value="$(arg itri_navgcroad)"/>
+            <param name="lanes" value="$(arg itri_lanes)"/>
+        </node>
+    </group>
+    <group if="$(eval arg('route') == 'artc')">
+      <node pkg = "route_mission_handler" type = "route_mission_handler_node" name = "route_mission_handler">
+          <param name="/route" value="$(arg route)"/>
+          <param name="navgcroad" value="$(arg artc_navgcroad)"/>
+          <param name="lanes" value="$(arg artc_lanes)"/>
+      </node>
+    </group>
+
+    <node pkg="route_mission_handler" type="load_data.py" name="load_file_node">
+        <param name="/route" value="$(arg route)" />
+        <param name="/waypoints_folder_path" value="$(arg waypoints_folder_path)" />
+        <param name="/roadline_folder_path" value="$(arg roadline_folder_path)" />
+        <param name="/marker_folder_path" value="$(arg marker_folder_path)" />
+
+        <param name="/navgroad_display" value="$(arg navgroad_display)" />
+        <param name="/lanenavgroad_display" value="$(arg lanenavgroad_display)" />
+        <param name="/waypoints_display" value="$(arg waypoints_display)" />
+        <param name="/roadline_display" value="$(arg roadline_display)" />
+        <param name="/roadmarker_display" value="$(arg roadmarker_display)" />
+        <param name="/intersections_display" value="$(arg intersections_display)" />
+
+        <!-- <param name="/output_path" value="$(arg output_path)"/> -->
+    </node>
+
+</launch>

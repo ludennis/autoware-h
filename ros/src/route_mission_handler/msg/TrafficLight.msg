@@ -1,0 +1,9 @@
+int32 id
+int32[] laneIds
+int32 type
+int32 lightNum
+string vps
+string vpe
+float32 heading
+geometry_msgs/Point[] points
+string[] lights

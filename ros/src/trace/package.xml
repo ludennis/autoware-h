@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>trace</name>
+  <version>1.0.0</version>
+  <description>The tracing library</description>
+  <maintainer email="itriA30220@itri.org.tw">Andrey Krainyak</maintainer>
+  <license>ITRI</license>
+  <buildtool_depend>catkin</buildtool_depend>
+</package>

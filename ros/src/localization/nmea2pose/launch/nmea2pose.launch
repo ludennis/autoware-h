@@ -1,0 +1,9 @@
+<launch>
+
+  <arg name="gps_reference" default="0"/>
+
+  <node pkg="nmea2pose" type="nmea2pose" name="nmea2pose" output="log">
+      <param name="gps_reference" value="$(arg gps_reference)"/>
+  </node>
+
+</launch>

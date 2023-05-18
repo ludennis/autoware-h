@@ -1,0 +1,20 @@
+<launch>
+
+  <arg name="simulation" default="false"/>
+  <arg name="headless" default="false"/>
+
+  <include file="$(env SDC_CONFIG_DIR)/boot.launch">
+    <arg name="simulation" value="$(arg simulation)"/>
+  </include>
+
+  <group unless="$(arg simulation)">
+    <include file="$(env SDC_CONFIG_DIR)/sensors.launch"/>
+    <include file="$(env SDC_CONFIG_DIR)/actuation.launch"/>
+  </group>
+
+  <include file="$(find sdc)/launch/localization.launch"/>
+  <include file="$(find sdc)/launch/visualization.launch">
+    <arg name="headless" value="$(arg headless)"/>
+  </include>
+
+</launch>

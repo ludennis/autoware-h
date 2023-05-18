@@ -1,0 +1,48 @@
+<launch>
+
+    <node pkg="nmea2pose" type="nmea2pose" name="nmea2pose" output="screen">
+        <param name="gps_reference" value="2"/>
+    </node>
+
+    <node pkg="localizer"
+          type="localizer_node"
+          name="localizer_node"
+          output="screen">
+        <param name="use_gnss" value="false"/>
+        <param name="use_imu_data" value="true"/>
+        <param name="use_odometer_data" value="true"/>
+        <param name="queue_size" value="10"/>
+        <param name="use_gpu" value="true"/>
+        <param name="imu_topic" value="/imu/data"/>
+        <param name="ndt_resolution" value="1.0"/>
+        <param name="ndt_step_size" value="0.1"/>
+        <param name="ndt_trans_epsilon" value="0.01"/>
+        <param name="ndt_max_iterations" value="30"/>
+        <param name="ndt_outlier_ratio" value="0.35"/>
+        <param name="ndt_fitness_score_threshold" value="0.3"/>
+        <param name="ndt_matching_score_threshold" value="1.4"/>
+        <param name="motion_filter_speed_kmph" value="0.0"/>
+        <param name="rviz_msg_marker_size" value="0.1"/>
+    </node>
+
+    <node pkg="voxel_grid_filter"
+          type="voxel_grid_filter_node"
+          name="localization_voxel_grid_filter_node"
+          output="screen"/>
+
+    <node name="map_loader"
+          pkg="pointmap_loader"
+          type="pointmap_loader"
+          output="screen">
+        <param name="initial_map_files" value="submap_0_0.pcd, submap_0_-1.pcd"/>
+        <param name="dynamic_loading" value="true"/>
+        <param name="initialize_with_gnss" value="true"/>
+        <param name="ndt_score_threshold" value="100"/>
+        <param name="search_radius" value="200"/>
+        <param name="rviz_downsample_size" value="100000"/>
+    </node>
+
+    <node name="pose_smoother_node"
+        pkg="pose_smoother" type="pose_smoother_node" output="log"/>
+
+</launch>

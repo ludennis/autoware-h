@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>eps_identification</name>
+  <version>0.0.0</version>
+  <description>The eps_identification package</description>
+
+  <maintainer email="mxwu@itri.org.tw">mxwu</maintainer>
+  <license>MIT</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <depend>rospy</depend>
+  <depend>itri_msgs</depend>
+
+</package>

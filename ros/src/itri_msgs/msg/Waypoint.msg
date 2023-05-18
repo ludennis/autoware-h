@@ -1,0 +1,10 @@
+geometry_msgs/PoseStamped pose
+geometry_msgs/TwistStamped twist
+int32 laneId
+int32 pointId
+geometry_msgs/Point point
+float32 heading
+float32 curvature
+int32 point_id
+int32 lane_id
+int32 nroad_id

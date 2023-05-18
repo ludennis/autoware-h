@@ -1,0 +1,158 @@
+<launch>
+
+    <arg name="bag"/>
+    <arg name="dump_data" default="false"/>
+    <arg name="dump_data_path" default="ndt-hino-58-gpu.json"/>
+    <arg name="headless" default="true"/>
+    <arg name="map"/>
+    <arg name="ndt_package" value="itri_localizer" unless="$(arg dump_data)"/>
+    <arg name="ndt_package" value="ndt_localizer" if="$(arg dump_data)"/>
+
+    <param name="/use_sim_time" value="true"/>
+
+    <node
+        pkg="rosbag"
+        type="play"
+        name="rosbag"
+        args="--clock $(arg bag)"
+        required="true"/>
+
+    <node pkg="tf" type="static_transform_publisher"
+          name="velodyne_frame_publisher"
+          args="1.2 0.0 1.0 0.0 0.14 0.005 base_link velodyne 100"/>
+
+    <param name="/localizer" value="velodyne"/>
+    <param name="/tf_x" value="1.2"/>
+    <param name="/tf_y" value="0.0"/>
+    <param name="/tf_z" value="1.0"/>
+    <param name="/tf_yaw" value="0.0"/>
+    <param name="/tf_pitch" value="0.14"/>
+    <param name="/tf_roll" value="0.005"/>
+
+    <node
+        pkg="rostopic"
+        type="rostopic"
+        name="ndt_config_publisher"
+        args="
+           pub --latch /config/ndt autoware_msgs/ConfigNdt
+           '{
+               error_threshold: 1.0,
+               resolution: 1.0,
+               step_size: 0.1,
+               trans_epsilon: 0.01,
+               max_iterations: 30,
+               init_pos_gnss: 0,
+           }'"/>
+
+    <node
+        pkg="rostopic"
+        type="rostopic"
+        name="initial_pose_publisher"
+        args="
+            pub --latch /initialpose geometry_msgs/PoseWithCovarianceStamped
+            '{
+                header: {
+                    frame_id: map
+                },
+                pose: {
+                    pose: {
+                        position: {
+                            x: 4.66513347626,
+                            y: -11.2280483246,
+                            z: -7.7901673317
+                        },
+                        orientation: {
+                            x: -0.00183210621462,
+                            y: 0.00191753668621,
+                            z: 0.937747148288,
+                            w: 0.347308583709
+                        }
+                    }
+                }
+            }'"/>
+
+    <include file="$(find voxel_grid_filter)/launch/voxel_grid_filter.launch">
+      <arg name="input_topic" value="velodyne_points"/>
+      <arg name="output_topic" value="filtered_points"/>
+      <arg name="voxel_leaf_size" value="1.0"/>
+    </include>
+
+
+    <node pkg="$(arg ndt_package)"
+          type="itri_localizer_node"
+          name="itri_localizer_node"
+          output="log"
+          required="true">
+        <param name="tf_x" value="1.2"/>
+        <param name="tf_y" value="0.0"/>
+        <param name="tf_z" value="1.0"/>
+        <param name="tf_yaw" value="0.0"/>
+        <param name="tf_pitch" value="0.14"/>
+        <param name="tf_roll" value="0.005"/>
+        <param name="initialpose_with_gnss" value="false"/>
+        <param name="use_gnss" value="0"/>
+        <param name="use_imu_data" value="true"/>
+        <param name="use_odometer_data" value="true"/>
+        <param name="queue_size" value="10"/>
+        <param name="offset" value="linear"/>
+        <param name="get_height" value="true"/>
+        <param name="use_local_transform" value="false"/>
+        <param name="use_fast_pcl" value="false"/>
+        <param name="use_gpu" value="true"/>
+        <param name="use_openmp" value="false"/>
+        <param name="imu_topic" value="/imu/data"/>
+        <param name="trans_probability_threshold" value="0.0"/>
+        <param name="use_object_filter" value="false"/>
+        <param name="max_distance" value="0.2"/>
+        <param name="object_points_topic" value="object_points"/>
+        <param name="segmentation_input_topic"
+            value="detection_points_velodyne"/>
+        <param name="ndt_resolution" value="1.0"/>
+        <param name="ndt_step_size" value="0.1"/>
+        <param name="ndt_trans_epsilon" value="0.01"/>
+        <param name="ndt_max_iterations" value="30"/>
+        <param name="ndt_outlier_ratio" value="0.35"/>
+        <param name="ndt_fitness_score_threshold" value="0.3"/>
+        <param name="ndt_matching_score_threshold" value="1.4"/>
+        <param name="motion_filter_speed_kmph" value="0.0"/>
+    </node>
+
+    <node name="map_loader"
+          pkg="pointmap_loader"
+          type="pointmap_loader"
+          output="log">
+        <param name="dynamic_loading" value="true"/>
+        <param name="ndt_score_threshold" value="100"/>
+        <param name="search_radius" value="100"/>
+        <param name="map_file_directory" value="$(arg map)"/>
+        <param name="initialize_with_gnss" value="false"/>
+        <param name="initial_map_files" value="submap_0_0.pcd, submap_0_-1.pcd"/>
+    </node>
+
+    <node pkg="rviz"
+          type="rviz"
+          name="rviz"
+          output="screen"
+          unless="$(arg headless)"
+          args="-d $(find sdc)/tests/localization/config.rviz"/>
+
+    <node pkg="sdc"
+          type="dump_ndt_pose.py"
+          name="dump_ndt_pose"
+          output="screen"
+          if="$(arg dump_data)">
+        <param name="file_path"
+            value="$(find sdc)/tests/localization/$(arg dump_data_path)"/>
+    </node>
+
+    <test pkg="sdc"
+          type="verify_ndt_pose.py"
+          time-limit="600"
+          test-name="verify_ndt_pose">
+        <param name="position_thresh" value="0.1"/>
+        <param name="orientation_thresh" value="0.0025"/>
+        <param name="file_path"
+            value="$(find sdc)/tests/localization/$(arg dump_data_path)"/>
+    </test>
+
+</launch>

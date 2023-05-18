@@ -1,0 +1,63 @@
+<launch>
+    <arg name="waypt_resolution" value="0.1"/>
+    <arg name="roll_in_factor" value="7.0"/>
+
+    <param name="ndt2veh_sub_car_pose_topic" value="/predict_pose"/>
+
+    <include file="$(find route_mission_handler)/launch/run.launch"/>
+
+    <node
+        pkg="ndt2veh"
+        type="ndt2veh_node"
+        name="ndt2veh">
+        <param name="model_covariance1" value="0.01"/>
+        <param name="model_covariance2" value="0.01"/>
+        <param name="model_covariance3" value="0.01"/>
+        <param name="sensor_covariance1" value="0.05"/>
+        <param name="sensor_covariance2" value="0.05"/>
+        <param name="sensor_covariance3" value="0.05"/>
+        <param name="ndt_threshold" value="1000.0"/>
+        <param name="ndt2veh_sub_car_pose_topic" value="/predict_pose"/>
+    </node>
+
+    <node
+        pkg="behavior"
+        type="behavior_node"
+        name="behavior"
+        output="screen">
+        <param name="waypt_resolution" value="$(arg waypt_resolution)"/>
+        <param name="car_max_speed" value="12.0"/>
+        <param name="pid_p_gain" value="1.0"/>
+        <param name="pid_i_gain" value="0.1"/>
+        <param name="pid_d_gain" value="0.0"/>
+        <param name="roll_in_factor" value="$(arg roll_in_factor)"/>
+    </node>
+
+    <node
+        pkg="laneinfo_detector"
+        type="laneinfo_detector_node"
+        name="laneinfo_detector">
+    </node>
+
+    <node
+        pkg="motion_planner"
+        type="motion_planner_node"
+        name="motion_planner">
+        <param name="weight_cen_cost" value="0.08"/>
+        <param name="weight_tran_cost" value="0.0"/>
+        <param name="weight_col_cost" value="0.84"/>
+        <param name="waypt_resolution" value="$(arg waypt_resolution)"/>
+        <param name="roll_in_factor" value="$(arg roll_in_factor)"/>
+        <param name="global_path_resolution" value="1.0"/>
+        <param name="roll_out_dist" value="100.0"/>
+    </node>
+
+    <node
+        pkg="waypoint_follower"
+        type="waypoint_follower_node"
+        name="waypoint_follower">
+        <param name="waypt_resolution" value="$(arg waypt_resolution)"/>
+        <param name="predict_ahead_time" value="1.4"/>
+    </node>
+
+</launch>

@@ -1,0 +1,12 @@
+Header header
+float32 estimated_velocity
+float32 estimated_acceleration
+float32 execution_time
+float32 fitness_score
+float32 fitness_score_with_valid_points
+uint32 invalid_points_number
+int32 iteration
+float32 ndt_matching_score
+float32 ndt_matching_score_with_valid_points
+uint32 source_points_number
+uint32 valid_points_number

@@ -1,0 +1,7 @@
+# catkin generated files
+build
+.catkin_workspace
+devel
+src/CMakeLists.txt
+*.swp
+*.pyc

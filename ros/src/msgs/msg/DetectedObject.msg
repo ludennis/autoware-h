@@ -1,0 +1,10 @@
+uint16 classId
+float32 distance
+float32 absSpeed
+float32 relSpeed
+BoxPoint bPoint
+TrackInfo track
+uint16 fusionSourceId
+CamInfo camInfo
+RadarInfo radarInfo
+LidarInfo lidarInfo

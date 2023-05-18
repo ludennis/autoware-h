@@ -1,0 +1,68 @@
+#! /usr/bin/env python2
+
+'''
+    Offline Analysis Tool to Log Pose Info and Generate Plot
+'''
+
+import rospy
+import matplotlib.pyplot as plt
+from geometry_msgs.msg import PoseStamped
+
+poses = []
+poses_smoothed = []
+
+def pose_callback(msg):
+    x = msg.pose.position.x
+    y = msg.pose.position.y
+    z = msg.pose.position.z
+
+    poses.append((x,y,z))
+
+    # display pose
+    rospy.loginfo("Pose: (%s, %s, %s)", x, y, z)
+
+def pose_smoothed_callback(msg):
+    x = msg.pose.position.x
+    y = msg.pose.position.y
+    z = msg.pose.position.z
+
+    poses_smoothed.append((x,y,z))
+
+    rospy.loginfo("Pose smoothed: (%s, %s, %s)", x, y, z)
+
+def pose_listener():
+    rospy.init_node('pose_listener', anonymous=True)
+    rospy.Subscriber('/predict_pose', PoseStamped, pose_callback)
+    rospy.Subscriber('/predict_pose_smoothed', PoseStamped, pose_smoothed_callback)
+
+    # start listening
+    rospy.spin()
+
+    # plot
+    plt.title('Poses')
+    plt.xlabel('x-coordinates')
+    plt.ylabel('y-coordinates')
+
+    x_coords = []
+    y_coords = []
+    z_coords = []
+    x_coords_smoothed = []
+    y_coords_smoothed = []
+    z_coords_smoothed = []
+
+    for pose in poses:
+        x_coords.append(pose[0])
+        y_coords.append(pose[1])
+        z_coords.append(pose[2])
+    plt.plot(x_coords, y_coords, 'r.-')
+
+    for pose_smoothed in poses_smoothed:
+        x_coords_smoothed.append(pose_smoothed[0])
+        y_coords_smoothed.append(pose_smoothed[1])
+        z_coords_smoothed.append(pose_smoothed[2])
+    plt.plot(x_coords_smoothed, y_coords_smoothed, 'b.-')
+
+    plt.show()
+
+if __name__ == '__main__':
+    pose_listener()

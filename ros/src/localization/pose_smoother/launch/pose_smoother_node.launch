@@ -1,0 +1,4 @@
+<launch>
+    <node name="pose_smoother_node"
+        pkg="pose_smoother" type="pose_smoother_node" output="log" />
+</launch>

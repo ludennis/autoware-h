@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<package format="2">
+    <name>motion_planner</name>
+    <version>0.0.0</version>
+    <description>The motion_planner package</description>
+    <maintainer email="mxwu@itri.org.tw">MingXuan Wu</maintainer>
+    <license>ITRI</license>
+    <buildtool_depend>catkin</buildtool_depend>
+    <depend>geometry_msgs</depend>
+    <depend>itri_msgs</depend>
+    <depend>roscpp</depend>
+    <depend>roslib</depend>
+    <depend>tf</depend>
+    <depend>trace</depend>
+    <depend>visualization_msgs</depend>
+</package>

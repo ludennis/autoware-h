@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>btpp</name>
+  <version>1.4.0</version>
+  <description>The behavior_tree library from BT++ version 1.4</description>
+  <maintainer email="itriA50427@itri.org.tw">Jerome Lin</maintainer>
+  <license>ITRI</license>
+  <buildtool_depend>catkin</buildtool_depend>
+</package>

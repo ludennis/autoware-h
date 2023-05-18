@@ -1,0 +1,13 @@
+Header header
+bool hint
+uint8 num_level
+float32 dev
+float32 bias
+float32 terminal_speed
+float32 terminal_distance
+bool update_num_level
+bool update_dev
+bool update_bias
+bool update_terminal_speed
+bool update_terminal_distance
+bool parking_start
